@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="assignment-4"
+run/main_scene="res://compute-shader/computer-shader-scene.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
