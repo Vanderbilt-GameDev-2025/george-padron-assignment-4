@@ -1,14 +1,15 @@
 shader_type spatial;
-render_mode cull_front, unshaded; 
+render_mode unshaded, cull_front, depth_draw_opaque;
 
-uniform float outline_thickness = 0.01;
-uniform vec4 outline_color = vec4(0.0, 0.0, 0.0, 1.0);  // Black by default
+uniform float outline_thickness : hint_range(0.0, 0.2) = 0.05; // adjust for thicker/thinner outlines
+uniform vec4 outline_color : source_color = vec4(0.0, 0.0, 0.0, 1.0); // black outline
 
 void vertex() {
-	
-	VERTEX += NORMAL * outline_thickness;
+    // Push vertices outward along their normal to create an outline
+    VERTEX += NORMAL * outline_thickness;
 }
 
 void fragment() {
-	ALBEDO = outline_color.rgb;
+    // Render in a solid outline color
+    ALBEDO = outline_color.rgb;
 }

@@ -1,47 +1,21 @@
 shader_type spatial;
 
-uniform vec4 base_color= vec4(1.0); 
-uniform sampler2D texture_albedo; 
-uniform float color_bands = 3.0; 
-uniform float specular_cutoff = 0.9; 
-uniform float specular_size = 0.2; 
-uniform vec4 specular_color = vec4(1.0); 
-
-// Rim light parameters 
-uniform vec4 rim_color = vec4(0.5, 0.7, 1.0, 1.0); 
-uniform float rim_threshold = 0.5; 
-uniform float rim_power = 2.0; 
-
-varying vec3 world_normal; 
-varying vec3 view_dir; 
-
-void vertex() {
-	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
-	view_dir = normalize(INV_VIEW_MATRIX[3].xyz - (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz); 
-}
+uniform int toon_steps : hint_range(2, 8) = 4; // number of shading steps
+uniform vec3 light_dir = vec3(0.0, 1.0, 0.0);  // light direction (adjust as needed)
+uniform float ambient_strength : hint_range(0.0, 1.0) = 0.2; // ambient term
+uniform vec3 base_color : source_color = vec3(1.0, 1.0, 1.0);
 
 void fragment() {
-	// Base texture color
-	vec4 tex_color = texture(texture_albedo, UV); 
-	ALBEDO = tex_color.rgb * base_color.rgb; 
-	
-	// Rim lighting calculation 
-	float rim = 1.0 - dot(world_normal, view_dir); 
-	rim = smoothstep(rim_threshold, rim_threshold + 0.2, rim); 
-	EMISSION = rim_color.rgb * pow(rim, rim_power); 
-}
-
-void light() {
-	vec3 light_dir = normalize(-LIGHT);
-	
-	float NdotL = max(dot(world_normal, light_dir), 0.0);
-	float stepped_diffuse = floor(NdotL * color_bands) / color_bands; 
-	
-	// Sharp specular highlights
-	vec3 reflect_dir = reflect(-light_dir, world_normal); 
-	float specular = dot(view_dir, reflect_dir); 
-	specular = smoothstep(specular_cutoff, specular_cutoff + specular_size, specular);
-	
-	vec3 light_contrib = (stepped_diffuse * ATTENUATION + specular) * LIGHT_COLOR.rgb;
-	DIFFUSE_LIGHT += light_contrib * ALBEDO;  
+    // Normalize the normal and light direction
+    vec3 N = normalize(NORMAL);
+    vec3 L = normalize(light_dir);
+    
+    // Calculate basic diffuse lighting
+    float diff = max(dot(N, L), 0.0);
+    
+    // Quantize the diffuse term into steps (cell shading effect)
+    diff = floor(diff * float(toon_steps)) / float(toon_steps);
+    
+    // Combine with an ambient term and apply the base color
+    ALBEDO = base_color * (ambient_strength + diff);
 }
