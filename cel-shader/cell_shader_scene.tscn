@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://dodbqsmxuv3ts"]
+
+[ext_resource type="Shader" path="res://cel-shader/outlines.gdshader" id="1_4vssa"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pogl4"]
+size = Vector2(10, 10)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rvmsb"]
+render_priority = 0
+shader = ExtResource("1_4vssa")
+shader_parameter/outline_thickness = 0.01
+shader_parameter/outline_color = Vector4(0, 0, 0, 1)
+
+[node name="Root" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_pogl4")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.586377, 0)
+flip_faces = true
+material = SubResource("ShaderMaterial_rvmsb")
+
+[node name="Outline" type="CSGSphere3D" parent="CSGSphere3D"]
+transform = Transform3D(0.999999, 0.00142559, 0.0004705, -0.0014259, 0.999999, 0.000661425, -0.000469539, -0.000662107, 1, 0, 0, 0)
+flip_faces = true
+material = SubResource("ShaderMaterial_rvmsb")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.37322, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, -1.79135e-08, 0.978782, 0.204906, 8.55678e-08, 0.204906, -0.978782, 0, 1.36794, -3.83663)
