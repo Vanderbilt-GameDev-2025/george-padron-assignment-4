@@ -6,7 +6,7 @@ This project contains four folders containing scenes each demonstrating a differ
 # How to setup
 Simply clone this repository and open it as a project in the latest version of Godot. 
 # First Shader
-[./first-shader.png]
+![First Shader](first-shader.png)
 
 The first shader is an example of a *vertex* shader, which transforms how the vertices on the mesh are rendered. In this case, the vertices are transformed using a noise map to create a simplistic terrain simulation. Then a normal map is rendered over the vertices to give the terrain more depth and have it respond more realistically to light. 
 # Second Shader
@@ -20,6 +20,7 @@ This shader does not render any graphics. Instead, we use the graphics shader in
 
 # Cel Shader
 ![Cel Shader](cel-shader.png)
+
 This custom shader has two elements: a fragment shader which alters the lighting of objects to give it a more "cartoonish" and simple look, and a vertex shader which renders a simple black outline. Attached to one of the objects in the scene is a gdscript which plays a simple animation - increasing the border and modifying the fresnel effect of the light in a loop to demonstrate how this shader can be modified by using gdscript. 
 
 The main cel shader itself uses a simple gradient and a fresnel effect in order to alter how light is rendered on objects. This smooths out the light, giving objects a simple "lit" and "unlit" look to them as if they were drawn by hand. 
