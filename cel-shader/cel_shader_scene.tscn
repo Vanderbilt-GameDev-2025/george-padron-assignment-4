@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://dodbqsmxuv3ts"]
+
+[ext_resource type="Shader" path="res://cel-shader/cel.gdshader" id="1_t5hru"]
+[ext_resource type="Texture2D" uid="uid://cfrdrnxilr8pu" path="res://cel-shader/cel-shader-gradient.tres" id="2_koy5o"]
+[ext_resource type="Shader" path="res://cel-shader/outlines.gdshader" id="3_vqhm3"]
+[ext_resource type="Script" path="res://cel-shader/cel-shader.gd" id="4_sxuvi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8a3x2"]
+render_priority = 0
+shader = ExtResource("1_t5hru")
+shader_parameter/base_color = Color(0.233925, 0.233925, 0.233925, 0.6)
+shader_parameter/fresnel_strength = 4.0
+shader_parameter/shadow_softness = 2.1
+shader_parameter/light_clamp = 0.9
+shader_parameter/color_gradient = ExtResource("2_koy5o")
+shader_parameter/fresnel_gradient = ExtResource("2_koy5o")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pogl4"]
+material = SubResource("ShaderMaterial_8a3x2")
+size = Vector2(10, 10)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3jidt"]
+render_priority = 0
+shader = ExtResource("3_vqhm3")
+shader_parameter/outline_thickness = 0.015
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cknat"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_3jidt")
+shader = ExtResource("1_t5hru")
+shader_parameter/base_color = Color(0.392157, 1, 0, 1)
+shader_parameter/fresnel_strength = 4.0
+shader_parameter/shadow_softness = 2.1
+shader_parameter/light_clamp = 0.9
+shader_parameter/color_gradient = ExtResource("2_koy5o")
+shader_parameter/fresnel_gradient = ExtResource("2_koy5o")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tvrih"]
+render_priority = 0
+shader = ExtResource("3_vqhm3")
+shader_parameter/outline_thickness = 0.015
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_14kok"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_tvrih")
+shader = ExtResource("1_t5hru")
+shader_parameter/base_color = Color(1, 0, 0, 1)
+shader_parameter/fresnel_strength = 4.0
+shader_parameter/shadow_softness = 2.1
+shader_parameter/light_clamp = 0.9
+shader_parameter/color_gradient = ExtResource("2_koy5o")
+shader_parameter/fresnel_gradient = ExtResource("2_koy5o")
+
+[node name="Root" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_pogl4")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.74332, 0.5, 7.29561e-05)
+material = SubResource("ShaderMaterial_cknat")
+script = ExtResource("4_sxuvi")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.137256, 0.5, 0)
+material = SubResource("ShaderMaterial_14kok")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11747, 1.68521, -0.559001)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, -5.5067e-14, -8.74228e-08, -1.79135e-08, 0.978782, 0.204906, 8.55678e-08, 0.204906, -0.978782, 0, 1.36794, -4.34302)
